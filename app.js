@@ -7,6 +7,7 @@ require('./models/setupMongo')();
 
 var todoRouter = require('./routes/todo');
 var authRouter = require('./routes/auth');
+var userRouter = require('./routes/users');
 
 var app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/auth', authRouter);
 app.use('/todo', todoRouter);
+app.use('/users', userRouter);
 
 app.use(express.static(path.join(__dirname, 'build')));
 
