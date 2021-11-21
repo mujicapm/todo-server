@@ -23,15 +23,16 @@ router.use(function(req, res, next) {
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
+
   const todos = await ToDo.find().where('author').equals(req.payload.id).exec()
   return res.status(200).json({"todos": todos})
 });
 
-router.get('/:todoId', async function(req, res, next) {
+router.get('/:id', async function(req, res, next) {
   //const posts = await Post.find().where('author').equals(req.payload.id).exec()
 
   //mongoose find query to retrieve post where postId == req.params.postId
-  const todo = await ToDo.findOne().where('_id').equals(req.params.todoId).exec()
+  const todo = await ToDo.findOne().where('_id').equals(req.params.id).exec()
 
   return res.status(200).json(todo)
 });
@@ -40,22 +41,22 @@ router.get('/:todoId', async function(req, res, next) {
 router.post('/', async function (req, res) {
   const todo = new ToDo({
     "title": req.body.title,
-    "description": req.body.description,
+    "content": req.body.content,
     "author": req.payload.id,
     "dateCreated": req.body.dateCreated,
-    "isComplete": req.body.isComplete,
-    "dateComplete": req.body.dateComplete
+    "complete": req.body.complete,
+    "completedOn": req.body.completedOn
   })
 
   await todo.save().then( savedToDo => {
     return res.status(201).json({
       "id": savedToDo._id,
       "title": savedToDo.title,
-      "description": savedToDo.content,
+      "content": savedToDo.content,
       "author": savedToDo.author,
       "dateCreated": savedToDo.dateCreated,
-      "isComplete": savedToDo.isComplete,
-      "dateComplete": savedToDo.dateComplete
+      "complete": savedToDo.complete,
+      "completeOn": savedToDo.completedOn
     })
   }).catch( error => {
     return res.status(500).json({"error": error.message})
